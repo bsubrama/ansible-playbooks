@@ -1,10 +1,9 @@
 from contentcuration.settings import *
 
-MEDIA_ROOT = "/var/www/{{ content_curation_prefix }}_media/"
+STORAGE_ROOT = "/var/www/{{ content_curation_prefix }}_storage/"
 STATIC_ROOT = "/var/www/{{ content_curation_prefix }}_static/"
 
-MEDIA_URL = "/media/"
-CONTENT_COPY_DIR = MEDIA_ROOT
+MEDIA_ROOT = STORAGE_ROOT
 
 LOGGING = {
     'version': 1,

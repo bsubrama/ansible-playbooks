@@ -8,6 +8,9 @@
   git: repo=https://github.com/fle-internal/content-curation.git version={{ content_curation_git_branch }} dest=/var/www/{{ content_curation_prefix }} update=yes
   sudo: yes
   sudo_user: www-data
+  notify: restart nginx
+  tags:
+    - setupcontentcuration
 
 - name: add the nodejs ppa
   shell: curl -sL https://deb.nodesource.com/setup | bash -
@@ -31,6 +34,7 @@
   sudo: yes
   tags:
     - setupnginx
+    - setupcontentcuration
 
 - name: remove default nginx config
   file: dest=/etc/nginx/sites-enabled/default state=absent
@@ -38,6 +42,7 @@
   sudo: yes
   tags:
     - setupnginx
+    - setupcontentcuration
 
 - name: install node deps
   shell: npm install
@@ -62,6 +67,15 @@
 
 - name: run content curation migrations
   shell: DJANGO_SETTINGS_MODULE=contentcuration.production_settings python manage.py migrate
+  args:
+    chdir: /var/www/{{ content_curation_prefix }}/contentcuration/
+  sudo: yes
+  sudo_user: www-data
+  tags:
+    - setupcontentcuration
+
+- name: Load the fixture data
+  shell: DJANGO_SETTINGS_MODULE=contentcuration.production_settings python manage.py loaddata initial_data.json
   args:
     chdir: /var/www/{{ content_curation_prefix }}/contentcuration/
   sudo: yes
@@ -108,16 +122,6 @@
     - buildassets
     - setupcontentcuration
 
-- name: build the js bundles
-  shell: node build.js --staticfiles
-  args:
-    chdir: /var/www/{{ content_curation_prefix }}/
-  sudo: yes
-  sudo_user: www-data
-  tags:
-    - buildassets
-    - setupcontentcuration
-
 - name: allow port 80 on our firewall
   ufw: policy=allow to_port=80
   sudo: yes
@@ -132,6 +136,16 @@
     - setupcontentcuration
     - setupsettings
 
+- name: build the js bundles
+  shell: node build.js
+  args:
+    chdir: /var/www/{{ content_curation_prefix }}/
+  sudo: yes
+  sudo_user: www-data
+  tags:
+    - buildassets
+    - setupcontentcuration
+
 - name: create the static file directory
   file: path=/var/www/{{ content_curation_prefix }}_static/ state=directory
   sudo: yes
@@ -139,6 +153,11 @@
   tags:
     - setupcontentcuration
     - setupsettings
+
+- name: Load the fixture data
+  shell: python manage.py loaddata initial_data.json
+  args:
+    chdir: /var/www/
 
 - name: check if the app server pid file info
   stat: path={{ content_curation_server_pid_file }}

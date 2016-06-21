@@ -18,12 +18,12 @@ server {
 
     location /static/ {
         autoindex on;
-        root /var/www/{{ content_curation_prefix }}/contentcuration/;
+        alias /var/www/{{ content_curation_prefix }}_static/;
     }
 
-    location /media/ {
+    location /storage/ {
         autoindex on;
-        root /var/www/{{ content_curation_prefix }}_media/;
+        root /var/www/{{ content_curation_prefix }}_storage/;
     }
 
     location / {
