@@ -56,6 +56,8 @@
   args:
     chdir: /var/www/{{ content_curation_prefix }}/
   sudo: yes
+  tags:
+    - installdeps
 
 - name: Copy production settings
   template: src=production_settings.py.j2 dest=/var/www/{{ content_curation_prefix }}/contentcuration/contentcuration/production_settings.py
@@ -92,27 +94,6 @@
   tags:
     - buildassets
     - setupcontentcuration
-
-- name: create a dummy superuser
-  shell: DJANGO_SETTINGS_MODULE=contentcuration.production_settings python manage.py createsuperuser --username=admin --email=admin@learningequality.org --noinput
-  args:
-    chdir: /var/www/{{ content_curation_prefix }}/contentcuration/
-  sudo: yes
-  ignore_errors: yes
-  sudo_user: www-data
-  tags:
-    - setupcontentcuration
-
-- name: create a dummy superuser
-  shell: "echo 'from django.contrib.auth.models import User; u = User.objects.get(username=\"admin\"); print \"same_password\" if u.check_password(\"pass\") else \"changed_password\"; u.set_password(\"pass\"); u.save()' | python manage.py shell"
-  args:
-    chdir: /var/www/{{ content_curation_prefix }}/contentcuration/
-  sudo: yes
-  sudo_user: www-data
-  tags:
-    - setupcontentcuration
-  register: setpassword
-  changed_when: "'changed_password' in setpassword.stdout"
 
 - name: create the js/bundles folder
   file: path=/var/www/{{ content_curation_prefix }}/contentcuration/static/js/bundles state=directory

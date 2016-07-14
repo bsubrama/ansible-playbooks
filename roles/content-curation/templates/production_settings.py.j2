@@ -23,3 +23,23 @@ LOGGING = {
         },
     },
 }
+
+{% if content_curation_sendgrid_email_host is defined %}
+EMAIL_HOST = "{{ content_curation_sendgrid_email_host }}"
+{% endif %}
+
+{% if content_curation_sendgrid_email_host_user is defined %}
+EMAIL_HOST_USER = "{{ content_curation_sendgrid_email_host_user }}"
+{% endif %}
+
+{% if content_curation_sendgrid_email_host_password is defined %}
+EMAIL_HOST_PASSWORD = "{{ content_curation_sendgrid_email_host_password }}"
+{% endif %}
+
+{% if content_curation_sendgrid_email_port is defined %}
+EMAIL_PORT = "{{ content_curation_sendgrid_email_port }}"
+{% endif %}
+
+{% if content_curation_sendgrid_email_use_tls is defined %}
+EMAIL_USE_TLS = {{ content_curation_sendgrid_email_use_tls }}
+{% endif %}
