@@ -56,10 +56,6 @@ proxy_backends:
     host: globe
     port: "{{ keep_ka_lite_central_port }}"
 
-  - name: scriptorium_forums
-    host: scriptorium
-    port: 80
-
   - name: old_adhocsync_dev_server
     host: 174.129.228.112
     port: 7007
@@ -171,9 +167,9 @@ virtual_hosts:
 
   - hosts:
       - forums.learningequality.org
-    backend: scriptorium_forums
-    force_https: yes
-    allow_https: yes
+    locations:
+      - path: = /
+        redirect: https://community.learningequality.org
 
   - hosts:
       - community.learningequality.org
