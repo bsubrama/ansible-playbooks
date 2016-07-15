@@ -3,13 +3,16 @@
 - name: Create the /var/www directory and set it as belonging to the www-data user.
   file: dest=/var/www owner=www-data state=directory
   sudo: yes
+  tags:
+    - setupcontentcuration
 
 - name: clone the content curation repo
-  git: repo=https://github.com/fle-internal/content-curation.git version={{ content_curation_git_branch }} dest=/var/www/{{ content_curation_prefix }} update=yes
+  git: repo=https://github.com/fle-internal/content-curation.git version={{ content_curation_git_branch }} dest=/var/www/{{ content_curation_prefix }} update=yes force=yes
   sudo: yes
   sudo_user: www-data
   notify: restart nginx
   tags:
+    - updatecontentcuration
     - setupcontentcuration
 
 - name: add the nodejs ppa
@@ -50,6 +53,17 @@
     chdir: /var/www/{{ content_curation_prefix }}/
   sudo: yes
   sudo_user: www-data
+  tags:
+    - setupdeps
+
+- name: install gunicorn
+  shell: pip install gunicorn
+  args:
+    chdir: /var/www/{{ content_curation_prefix }}/
+  sudo: yes
+  tags:
+    - setupdeps
+    - setupcontentcuration
 
 - name: install python deps
   shell: pip install -r requirements.txt
@@ -57,7 +71,8 @@
     chdir: /var/www/{{ content_curation_prefix }}/
   sudo: yes
   tags:
-    - installdeps
+    - setupdeps
+    - setupcontentcuration
 
 - name: Copy production settings
   template: src=production_settings.py.j2 dest=/var/www/{{ content_curation_prefix }}/contentcuration/contentcuration/production_settings.py
