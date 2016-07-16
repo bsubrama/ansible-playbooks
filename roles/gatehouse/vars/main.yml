@@ -56,8 +56,8 @@ proxy_backends:
     host: globe
     port: "{{ keep_ka_lite_central_port }}"
 
-  - name: scriptorium_forums
-    host: scriptorium
+  - name: unicef_content_curation
+    host: 192.237.179.50
     port: 80
 
   - name: old_adhocsync_dev_server
@@ -171,9 +171,9 @@ virtual_hosts:
 
   - hosts:
       - forums.learningequality.org
-    backend: scriptorium_forums
-    force_https: yes
-    allow_https: yes
+    locations:
+      - path: = /
+        redirect: https://community.learningequality.org
 
   - hosts:
       - community.learningequality.org
@@ -194,6 +194,10 @@ virtual_hosts:
   - hosts:
       - demo.learningequality.org
     backend: field_kalite_demo
+
+  - hosts:
+      - unicefcontentcuration.learningequality.org
+    backend: unicef_content_curation
 
 
   - hosts:
