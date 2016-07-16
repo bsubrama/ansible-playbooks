@@ -75,9 +75,8 @@
     - setupcontentcuration
 
 - name: Copy production settings
-  template: src=production_settings.py.j2 dest=/var/www/{{ content_curation_prefix }}/contentcuration/contentcuration/production_settings.py
+  template: src=production_settings.py.j2 dest=/var/www/{{ content_curation_prefix }}/contentcuration/contentcuration/production_settings.py owner=www-data
   sudo: yes
-  sudo_user: www-data
   tags:
     - setupcontentcuration
     - setupsettings
@@ -150,10 +149,10 @@
     - setupcontentcuration
     - setupsettings
 
-- name: Load the fixture data
-  shell: python manage.py loaddata initial_data.json
-  args:
-    chdir: /var/www/
+# - name: Load the fixture data
+#   shell: python manage.py loaddata initial_data.json
+#   args:
+#     chdir: /var/www/
 
 - name: check if the app server pid file info
   stat: path={{ content_curation_server_pid_file }}
