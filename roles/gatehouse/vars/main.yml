@@ -60,6 +60,10 @@ proxy_backends:
     host: 192.237.179.50
     port: 80
 
+  - name: unicef_kolibri_demo
+    host: 192.237.179.50
+    port: 80
+
   - name: old_adhocsync_dev_server
     host: 174.129.228.112
     port: 7007
@@ -199,6 +203,9 @@ virtual_hosts:
       - unicefcontentcuration.learningequality.org
     backend: unicef_content_curation
 
+  - hosts:
+      - kolibridemo.learningequality.org
+    backend: unicef_kolibri_demo
 
   - hosts:
       - dashboard.learningequality.org
