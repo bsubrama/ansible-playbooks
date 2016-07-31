@@ -1,0 +1,51 @@
+---
+- name: copy over kolibri pex file
+  copy: src=./kolibri-static.pex dest=/var/www/kolibri-static.pex
+  sudo: yes
+  sudo_user: www-data
+  tags:
+    - setupkolibri
+
+- name: super hack hack hack copy the export staging sqlite file from the content curation server
+  command: cp /var/www/{{ content_curation_prefix }}/contentcuration/export_staging.sqlite3 ~/.kolibri/content/databases/dummy_db.sqlite3
+  sudo: yes
+  sudo_user: www-data
+  tags:
+    - setupkolibri
+
+- name: super hack hack hack make a symbolic link from the content curation storage dir to kolibri home
+  shell: mkdir -p ~/.kolibri/content/ && ln -s /var/www/{{ content_curation_prefix }}_storage/ ~/.kolibri/content/storage
+  sudo: yes
+  sudo_user: www-data
+  tags:
+    - setupkolibri
+
+- name: allow port 8199 on our firewall
+  ufw: policy=allow to_port=8199
+  sudo: yes
+  tags:
+    - setupkolibri
+
+
+- name: add nginx setup
+  template: src=nginx.kolibriprod.conf.j2 dest=/etc/nginx/sites-enabled/kolibri mode='u=rw,g=r,o=r'
+  notify: restart nginx
+  sudo: yes
+  tags:
+    - setupnginx
+    - setupkolibri
+
+# - name: stop the existing kolibri process
+#   command: /var/www/kolibri-static.pex stop
+#   sudo: yes
+#   sudo_user: www-data
+#   ignore_errors: true
+#   tags:
+#     - setupkolibri
+
+# - name: start kolibri
+#   command: /var/www/kolibri-static.pex start
+#   sudo: yes
+#   sudo_user: www-data
+#   tags:
+#     - setupkolibri
