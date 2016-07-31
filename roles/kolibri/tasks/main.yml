@@ -1,6 +1,6 @@
 ---
 - name: copy over kolibri pex file
-  copy: src=./kolibri-static-0.0.1.dev20160726004902.pex dest=/var/www/kolibri-static.pex
+  copy: src=./kolibri-static.pex dest=/var/www/kolibri-static.pex
   sudo: yes
   sudo_user: www-data
   tags:
