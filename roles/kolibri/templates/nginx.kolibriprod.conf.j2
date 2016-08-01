@@ -5,12 +5,16 @@ upstream kolibri_server {
 server {
   server_name kolibridemo.learningequality.org;
 
-  listen 80;
+  listen 8199;
 
   client_max_body_size 4G;
 
   access_log /var/log/nginx-access.log;
   error_log /var/log/nginx-error.log debug;
+
+  location /content/storage {
+    alias /var/www/.kolibri/content/storage;
+  }
 
   location / {
 # an HTTP header important enough to have its own Wikipedia entry:

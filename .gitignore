@@ -2,3 +2,4 @@ secrets.yml
 roles/gatehouse/files/ssl/
 *.retry
 /windows-installer/
+vault-password.txt

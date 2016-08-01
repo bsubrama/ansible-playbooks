@@ -1,20 +1,32 @@
 ---
 - name: copy over kolibri pex file
-  copy: src=./kolibri-static.pex dest=/var/www/kolibri-static.pex
+  copy: src=./kolibri-static.pex dest=/var/www/kolibri-static.pex owner=www-data
+  sudo: yes
+  tags:
+    - setupkolibri
+
+- name: super hack hack hack move the export staging sqlite file from the content curation server
+  command: removes=/var/www/{{ content_curation_prefix }}/contentcuration/export_staging.sqlite3 mv /var/www/{{ content_curation_prefix }}/contentcuration/export_staging.sqlite3 ~/.kolibri/content/databases/dummy_db.sqlite3
   sudo: yes
   sudo_user: www-data
   tags:
     - setupkolibri
 
-- name: super hack hack hack copy the export staging sqlite file from the content curation server
-  command: cp /var/www/{{ content_curation_prefix }}/contentcuration/export_staging.sqlite3 ~/.kolibri/content/databases/dummy_db.sqlite3
+# - name: super hack hack hack make a symbolic link from the content curation storage dir to kolibri home
+#   shell: mkdir -p ~/.kolibri/content/ && ln -s /var/www/{{ content_curation_prefix }}_storage/ ~/.kolibri/content/storage
+#   sudo: yes
+#   sudo_user: www-data
+#   tags:
+#     - setupkolibri
+
+- name: ensure content directory exists in kolibri home
+  file: dest=~/.kolibri/content/ state=directory owner=www-data
   sudo: yes
-  sudo_user: www-data
   tags:
     - setupkolibri
 
-- name: super hack hack hack make a symbolic link from the content curation storage dir to kolibri home
-  shell: mkdir -p ~/.kolibri/content/ && ln -s /var/www/{{ content_curation_prefix }}_storage/ ~/.kolibri/content/storage
+- name: Make a symbolic link from the content curation storage dir to kolibri home
+  file: dest=~/.kolibri/content/storage src=/var/www/{{ content_curation_prefix }}_storage/storage owner=www-data state=link
   sudo: yes
   sudo_user: www-data
   tags:
@@ -49,3 +61,4 @@
 #   sudo_user: www-data
 #   tags:
 #     - setupkolibri
+
