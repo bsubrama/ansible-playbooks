@@ -29,13 +29,13 @@ server {
     }
 
     location /content/storage/ {
-        autoindex on;
-        root /var/www/{{ content_curation_prefix }}_storage/;
+        autoindex off;
+        alias /var/www/{{ content_curation_prefix }}_storage/;
     }
 
     location /content/databases/ {
         autoindex off;
-        root /var/www/{{ content_curation_prefix}}_content_db_export/;
+        alias /var/www/{{ content_curation_prefix}}_content_db_export/;
     }
 
     location / {
