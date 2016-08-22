@@ -30,12 +30,12 @@ server {
 
     location /content/storage/ {
         autoindex on;
-        root /var/www/{{ content_curation_prefix }}_storage/;
+        alias /var/www/{{ content_curation_prefix }}_storage/storage/;
     }
 
     location /content/databases/ {
         autoindex off;
-        root /var/www/{{ content_curation_prefix}}_content_db_export/;
+        alias /var/www/{{ content_curation_prefix}}_content_db_export/;
     }
 
     location / {

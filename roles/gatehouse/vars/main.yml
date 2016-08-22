@@ -202,10 +202,14 @@ virtual_hosts:
   - hosts:
       - unicefcontentcuration.learningequality.org
     backend: unicef_content_curation
+    allow_https: yes
+    force_https: yes
 
   - hosts:
       - kolibridemo.learningequality.org
     backend: unicef_kolibri_demo
+    allow_https: yes
+    force_https: yes
 
   - hosts:
       - dashboard.learningequality.org
