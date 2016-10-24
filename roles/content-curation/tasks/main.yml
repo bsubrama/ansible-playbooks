@@ -16,7 +16,7 @@
     - setupcontentcuration
 
 - name: add the nodejs ppa
-  shell: curl -sL https://deb.nodesource.com/setup | bash -
+  shell: curl -sL https://deb.nodesource.com/setup_4.x | bash -
   sudo: yes
   tags:
     - setupdeps
@@ -26,8 +26,11 @@
   sudo: yes
   with_items:
     - nodejs
+    - npm
     - nginx
-    - python-dev
+    - python3-dev
+    - python3-pip
+    - python-virtualenv
   tags:
     - setupdeps
 
@@ -56,20 +59,30 @@
   tags:
     - setupdeps
 
-- name: install gunicorn
-  shell: pip install gunicorn
-  args:
-    chdir: /var/www/{{ content_curation_prefix }}/
+- name: ensure that the content-curation postgres database is present
+  postgresql_db: name=content-curation owner=www-data state=present login_password=NULL login_user=www-data
   sudo: yes
+  sudo_user: www-data
   tags:
     - setupdeps
     - setupcontentcuration
+    - setupdb
 
-- name: install python deps
-  shell: pip install -r requirements.txt
-  args:
-    chdir: /var/www/{{ content_curation_prefix }}/
+# - name: install python deps
+#   shell: "{{ pip_binary }} install -r requirements.txt"
+#   args:
+#     chdir: /var/www/{{ content_curation_prefix }}/
+#   sudo: yes
+#   tags:
+#     - setupdeps
+#     - setupcontentcuration
+
+- name: initiate virtualenv with dependencies
+  pip: virtualenv={{ content_curation_virtualenv }}
+       virtualenv_python=python2
+       requirements=/var/www/{{ content_curation_prefix }}/requirements.txt
   sudo: yes
+  sudo_user: www-data
   tags:
     - setupdeps
     - setupcontentcuration
@@ -77,12 +90,16 @@
 - name: Copy production settings
   template: src=production_settings.py.j2 dest=/var/www/{{ content_curation_prefix }}/contentcuration/contentcuration/production_settings.py owner=www-data
   sudo: yes
+  when:
+    - content_curation_database_name is defined
+    - content_curation_database_user is defined
+    - content_curation_database_password is defined
   tags:
     - setupcontentcuration
     - setupsettings
 
 - name: run content curation migrations
-  shell: DJANGO_SETTINGS_MODULE=contentcuration.production_settings python manage.py migrate
+  shell: DJANGO_SETTINGS_MODULE=contentcuration.production_settings {{ python_binary }} manage.py migrate
   args:
     chdir: /var/www/{{ content_curation_prefix }}/contentcuration/
   sudo: yes
@@ -91,22 +108,12 @@
     - setupcontentcuration
 
 - name: Load the fixture data
-  shell: DJANGO_SETTINGS_MODULE=contentcuration.production_settings python manage.py loaddata initial_data.json
+  shell: DJANGO_SETTINGS_MODULE=contentcuration.production_settings {{ python_binary }} manage.py loadconstants
   args:
     chdir: /var/www/{{ content_curation_prefix }}/contentcuration/
   sudo: yes
   sudo_user: www-data
   tags:
-    - setupcontentcuration
-
-- name: collect the assets
-  shell: DJANGO_SETTINGS_MODULE=contentcuration.production_settings python manage.py collectstatic --noinput && python manage.py collectstatic_js_reverse
-  args:
-    chdir: /var/www/{{ content_curation_prefix }}/contentcuration/
-  sudo: yes
-  sudo_user: www-data
-  tags:
-    - buildassets
     - setupcontentcuration
 
 - name: create the js/bundles folder
@@ -132,7 +139,7 @@
     - setupsettings
 
 - name: build the js bundles
-  shell: node build.js
+  shell: nodejs build.js
   args:
     chdir: /var/www/{{ content_curation_prefix }}/
   sudo: yes
@@ -148,6 +155,17 @@
   tags:
     - setupcontentcuration
     - setupsettings
+
+- name: collect the assets
+  shell: DJANGO_SETTINGS_MODULE=contentcuration.production_settings {{ python_binary }} manage.py collectstatic --noinput && {{ python_binary }} manage.py collectstatic_js_reverse
+  args:
+    chdir: /var/www/{{ content_curation_prefix }}/contentcuration/
+  sudo: yes
+  sudo_user: www-data
+  tags:
+    - buildassets
+    - setupcontentcuration
+
 
 # - name: Load the fixture data
 #   shell: python manage.py loaddata initial_data.json
@@ -177,7 +195,7 @@
     - runserver
 
 - name: run the server if it is not running
-  shell: gunicorn contentcuration.wsgi --workers 3 --daemon --reload --bind=unix:/var/www/{{ content_curation_prefix}}/gunicorn.sock --pid {{ content_curation_server_pid_file }} --env PYTHONPATH='.:contentcuration/' --env DJANGO_SETTINGS_MODULE=contentcuration.production_settings --log-file /tmp/content_curation.log --log-level debug
+  shell: "{{ gunicorn_binary }} contentcuration.wsgi --workers 3 --daemon --reload --bind=unix:/var/www/{{ content_curation_prefix}}/gunicorn.sock --pid {{ content_curation_server_pid_file }} --env PYTHONPATH='.:contentcuration/' --env DJANGO_SETTINGS_MODULE=contentcuration.production_settings --log-file /tmp/content_curation.log --log-level debug"
   args:
     chdir: /var/www/{{ content_curation_prefix }}/contentcuration/
   sudo: yes
