@@ -51,6 +51,9 @@ admins:
   tramanh: # elizabeth
     keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCurVmjqj9it+i1l2vrzxy7EQgSgd92+n7nFM8Wtd/pySmbAb1qz/orBTAG2bAZsahTJHFujRvnsiY7YDzvx90S3Yf4UVw9d/M/FOVm7y/quZ0JywUPWA++Fcf6QFZ3VEZIpM4mr4QF6tObpJVXntkC/Fd5bHob5f3hZjinhqQO5mnpb+hFBhuG23oGn4Ms+PjqQ39CsjbEPUrukftmDTk3yMx8zshzZbPHauc3tEW5HllUz7UaMVsaxrdlNUmkuteYVUNBSwM5DdQhf+myBHlPOSKiCj8TL1DT1TbFXwCk5XlQnwb/RTkK6M7CmSCgy3QaRWYu0OPKUDk4/RmcG1YX tramanh@Tramanh
+  jordan:
+    keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDIJ4BpxUhpolkxzWev1KcVmMxKA3rqUtRTplw3/LDMZzWuD/CVe5jkKQtlRcVTM8Kou99ide8X7WNaAfK0E/VHdCgsgAkKe+Q+qvhisNx8aC2gFD20L07XQOPjNXsdPEswChRa1VVdRJ40hQp/9Ha0q+U5+6Flc/eOFRFIWpnz3j4UGcR/mWdmfkSu73AsJTL2+3oBJt3rFiIoNIaBXidI99ZS1BNJS4yLn8Qrtglws367otvUcrcDFTAJ/wawR9pHaGCzvPHlG6of4ApOTMq3SPH9Nb+nVLPl57IOjUipl8kdXmyoOXp8oVxv1MZO1gKRoBdcCdG2vjkfdmVWPDLJ Jordan@TheBBQ
 
 former_admins:
   - videoserver
