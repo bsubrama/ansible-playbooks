@@ -123,7 +123,12 @@ permissions:
     - jamalex
     - aron
     - richard
+    - jordan
   support:
     - jamalex
     - aron
     - richard
+  contentcuration:
+    - aron
+    - jamalex
+    - jordan
