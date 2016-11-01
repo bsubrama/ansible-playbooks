@@ -7,6 +7,21 @@ DB_ROOT = "/var/www/{{ content_curation_prefix }}_content_db_export/"
 
 MEDIA_ROOT = STORAGE_ROOT
 
+DATABASES = {
+   'default': {
+       'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+       'NAME': "{{ content_curation_database_name }}",
+       'USER': "{{ content_curation_database_user }}",
+       'PASSWORD': "{{ content_curation_database_password }}",
+       'HOST': 'localhost',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+       'PORT': '',                      # Set to empty string for default.
+   },
+   'export_staging': {
+       'ENGINE': 'django.db.backends.sqlite3',
+       'NAME': os.path.join(BASE_DIR, 'export_staging.sqlite3')
+   }
+}
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
