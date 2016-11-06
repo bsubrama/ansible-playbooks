@@ -1,0 +1,27 @@
+---
+- name: set up the www-data user for postgres access
+  postgresql_user: name=www-data password=NULL role_attr_flags=CREATEDB,NOSUPERUSER state=present
+  sudo: yes
+  sudo_user: postgres           # postgres is the initial db superuser
+  tags:
+    - setuppostgres
+
+- name: setup the default DB for www-data
+  postgresql_db: name=www-data owner=www-data
+  sudo: yes
+  sudo_user: postgres
+  notify:
+    - restart postgres
+  tags:
+    - setuppostgres
+
+- name: make sure any user can create and connect to a DB
+  lineinfile: dest=/etc/postgresql/9.5/main/pg_hba.conf
+              state=present
+              line="local   all             www-data                                trust"
+  sudo: yes
+  sudo_user: postgres
+  notify:
+    - restart postgres
+  tags:
+    - setuppostgres
