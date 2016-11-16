@@ -23,14 +23,15 @@ server {
         alias /var/www/{{ content_curation_prefix }}_static/;
     }
 
+    # remove this once extant references in CC server are gone
     location /storage/ {
         autoindex on;
-        root /var/www/{{ content_curation_prefix }}_storage/;
+        alias /var/www/{{ content_curation_prefix }}_storage/;
     }
 
     location /content/storage/ {
         autoindex on;
-        alias /var/www/{{ content_curation_prefix }}_storage/storage/;
+        alias /var/www/{{ content_curation_prefix }}_storage/;
     }
 
     location /content/databases/ {
