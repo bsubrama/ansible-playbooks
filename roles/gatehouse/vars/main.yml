@@ -136,6 +136,14 @@ virtual_hosts:
     allow_https: yes
 
   - hosts:
+        - leq.ngo
+        - leq.ong
+    allow_https: no
+    locations:
+      - path: ~ ^/(.*)
+        redirect: https://learningequality.org/$1
+
+  - hosts:
       - hub.learningequality.org
     backend: keep_ka_lite_central
     allow_https: yes
