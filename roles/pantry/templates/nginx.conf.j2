@@ -23,6 +23,12 @@ http {
     client_max_body_size 500m;
 
     include /etc/nginx/mime.types;
+    
+    # Additional mime types
+    types {
+        application/x-bittorrent torrent;
+    }
+
     default_type application/octet-stream;
 
     ##
