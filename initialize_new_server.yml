@@ -32,7 +32,7 @@
   - name: Add RSA key to the remote host
     authorized_key:
       user: {{ username }}
-      key: "https://github.com/aronasorman.keys"
+      key: "https://github.com/{{ github_username }}.keys"
       state: present
     notify:
     - restart ssh
