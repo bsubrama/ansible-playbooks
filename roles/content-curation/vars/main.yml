@@ -12,8 +12,13 @@ gunicorn_binary: "{{ content_curation_virtualenv }}/bin/gunicorn"
 system_packages_to_remove: []
 
 system_packages:
+  - postgresql
+  - postgresql-contrib
+  - python-dev
+  - postgresql-server-dev-all   # to build psycopg2
   - nginx
   - openssl
 
 python_packages:
+  - psycopg2
   - gunicorn
