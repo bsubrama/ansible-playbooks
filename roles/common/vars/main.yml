@@ -70,6 +70,7 @@ permissions:
   keep:
     - jamalex
     - aron
+    - benjamin
   scriptorium:
     - jamalex
     - aron
@@ -91,6 +92,7 @@ permissions:
     - aron
     - richard
     - tramanh
+    - benjamin
   troy:
     - jamalex
     - aron
