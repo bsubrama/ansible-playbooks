@@ -1,0 +1,20 @@
+---
+
+- name: update kolibri install
+  pip: name=kolibri state=latest
+  sudo: yes
+
+- name: Create the /var/www directory and set it as belonging to the www-data user.
+  file: dest=/var/www owner=www-data state=directory
+  sudo: yes
+
+- name: start kolibri
+  command: kolibri start
+  sudo: yes
+  sudo_user: www-data
+
+- name: allow port 8199 on our firewall
+  ufw: policy=allow to_port=8080
+  sudo: yes
+  tags:
+    - setupkolibri

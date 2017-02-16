@@ -68,6 +68,10 @@ proxy_backends:
     host: 192.237.179.50
     port: 8199
 
+  - name: kolibridemo
+    host: 192.237.248.135
+    port: 8080
+
   - name: old_adhocsync_dev_server
     host: 174.129.228.112
     port: 7007
@@ -227,7 +231,7 @@ virtual_hosts:
 
   - hosts:
       - kolibridemo.learningequality.org
-    backend: unicef_kolibri_demo
+    backend: kolibridemo
     allow_https: yes
     force_https: yes
 
