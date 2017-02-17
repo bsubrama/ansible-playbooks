@@ -6,6 +6,7 @@ common_system_packages:
   - htop
   - iotop
   - unzip
+  - mosh
 
 common_python_packages:
   - ipython==0.11
