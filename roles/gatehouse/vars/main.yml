@@ -72,6 +72,10 @@ proxy_backends:
     host: 192.237.248.135
     port: 8080
 
+  - name: instantschools_kolibridemo
+    host: 192.237.248.135
+    port: 8090
+
   - name: old_adhocsync_dev_server
     host: 174.129.228.112
     port: 7007
@@ -232,6 +236,12 @@ virtual_hosts:
   - hosts:
       - kolibridemo.learningequality.org
     backend: kolibridemo
+    allow_https: yes
+    force_https: yes
+
+  - hosts:
+      - instantschools.learningequality.org
+    backend: instantschools_kolibridemo
     allow_https: yes
     force_https: yes
 
