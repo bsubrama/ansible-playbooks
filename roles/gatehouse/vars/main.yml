@@ -68,6 +68,10 @@ proxy_backends:
     host: 192.237.179.50
     port: 8199
 
+  - name: vaultserver
+    host: 104.198.2.23
+    port: 8200
+
   - name: kolibridemo
     host: 192.237.248.135
     port: 8080
@@ -242,6 +246,12 @@ virtual_hosts:
   - hosts:
       - instantschools.learningequality.org
     backend: instantschools_kolibridemo
+    allow_https: yes
+    force_https: yes
+
+  - hosts:
+      - secretservice.learningequality.org
+    backend: vaultserver
     allow_https: yes
     force_https: yes
 
