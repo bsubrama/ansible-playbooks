@@ -61,7 +61,7 @@ proxy_backends:
     port: 80
 
   - name: official_content_curation
-    host: 192.237.249.85
+    host: 162.209.89.171
     port: 80
 
   - name: unicef_kolibri_demo
