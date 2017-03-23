@@ -247,13 +247,13 @@ virtual_hosts:
 
 
   - hosts:
-      - fr.kolibridemo.learningequality.org
+      - fr.instantschools.learningequality.org
     backend: kolibridemo_fr_hack
     allow_https: yes
     force_https: yes
 
   - hosts:
-      - pt.kolibridemo.learningequality.org
+      - pt.instantschools.learningequality.org
     backend: kolibridemo_pt_hack
     allow_https: yes
     force_https: yes
