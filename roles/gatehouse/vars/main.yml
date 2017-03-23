@@ -76,6 +76,14 @@ proxy_backends:
     host: 192.237.248.135
     port: 8080
 
+  - name: kolibridemo_fr_hack
+    host: 192.237.248.135
+    port: 9090
+
+  - name: kolibridemo_pt_hack
+    host: 192.237.248.135
+    port: 9080
+
   - name: instantschools_kolibridemo
     host: 192.237.248.135
     port: 8090
@@ -234,6 +242,19 @@ virtual_hosts:
       - jordansemporium.learningequality.org
       - aronslair.learningequality.org
     backend: official_content_curation
+    allow_https: yes
+    force_https: yes
+
+
+  - hosts:
+      - fr.kolibridemo.learningequality.org
+    backend: kolibridemo_fr_hack
+    allow_https: yes
+    force_https: yes
+
+  - hosts:
+      - pt.kolibridemo.learningequality.org
+    backend: kolibridemo_pt_hack
     allow_https: yes
     force_https: yes
 
