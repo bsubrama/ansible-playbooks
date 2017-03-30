@@ -14,11 +14,13 @@
   register: release_name
 
 - name: Add docker\'s apt key
-  shell: curl -fsSL https://apt.dockerproject.org/gpg | apt-key add -
+  apt_key: url=https://apt.dockerproject.org/gpg state=present
   sudo: yes
 
 - name: add the docker repo
-  shell: add-apt-repository "deb https://apt.dockerproject.org/repo/ ubuntu-{{ release_name.stdout }} main"
+  apt_repository:
+    repo: "deb https://apt.dockerproject.org/repo/ ubuntu-{{ release_name.stdout }} main"
+    state: present
   sudo: yes
 
 - name: update package list
