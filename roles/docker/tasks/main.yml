@@ -42,6 +42,6 @@
     shell: /bin/bash
     append: yes
   with_items:
-    - "{{ ansible_ssh_user }}"
+    - "{{ permissions[inventory_hostname] }}"
     - "www-data"
   sudo: yes
