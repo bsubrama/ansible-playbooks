@@ -3,7 +3,7 @@
 # ('host' must be specified)
 
 # To create as a root user, do something like:
-# ansible-playbook -i hosts initialize_new_server.yml -e "host=blah ansible_ssh_port=22" --ask-pass
+# ansible-playbook -i hosts initialize_new_server.yml -e "github_username=<YOUR GITHUB USERNAME> host=blah ansible_ssh_port=22" --ask-pass
 
 - hosts: '{{ host }}'
   sudo: yes
