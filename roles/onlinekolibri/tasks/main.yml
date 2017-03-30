@@ -12,9 +12,3 @@
   command: kolibri start
   sudo: yes
   sudo_user: www-data
-
-- name: allow port 8199 on our firewall
-  ufw: policy=allow to_port=8080
-  sudo: yes
-  tags:
-    - setupkolibri
