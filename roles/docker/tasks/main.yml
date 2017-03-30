@@ -13,10 +13,6 @@
   command: lsb_release -cs
   register: release_name
 
-- name: get the username running the deploy (to add to docker)
-  local_action: command whoami
-  register: username
-
 - name: Add docker\'s apt key
   shell: curl -fsSL https://apt.dockerproject.org/gpg | apt-key add -
   sudo: yes
@@ -46,6 +42,6 @@
     shell: /bin/bash
     append: yes
   with_items:
-    - "{{ username.stdout }}"
+    - "{{ ansible_ssh_user }}"
     - "www-data"
   sudo: yes
