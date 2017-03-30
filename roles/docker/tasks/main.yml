@@ -23,12 +23,8 @@
     state: present
   sudo: yes
 
-- name: update package list
-  apt: update_cache=yes
-  sudo: yes
-
 - name: install docker
-  apt: name="docker-engine=1.13.1-0~ubuntu-{{ release_name.stdout }}" state=present
+  apt: name="docker-engine=1.13.1-0~ubuntu-{{ release_name.stdout }}" state=present update_cache=yes
   sudo: yes
 
 - name: make sure the docker group exists
