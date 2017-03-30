@@ -65,6 +65,9 @@ http {
 
     ssl_session_cache shared:SSL:10m;
     ssl_session_timeout 10m;
+    
+    # needed in order to enable byte range requests
+    proxy_http_version 1.1;
 
     ##
     # Virtual Host Configs
