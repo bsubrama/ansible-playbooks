@@ -64,6 +64,10 @@ proxy_backends:
     host: 162.209.89.171
     port: 80
 
+  - name: gcloud_content_curation
+    host: 35.190.13.171
+    port: 80
+
   - name: unicef_kolibri_demo
     host: 192.237.179.50
     port: 8199
@@ -241,7 +245,7 @@ virtual_hosts:
       - contentworkshop.learningequality.org
       - jordansemporium.learningequality.org
       - aronslair.learningequality.org
-    backend: official_content_curation
+    backend: gcloud_content_curation
     allow_https: yes
     force_https: yes
 
