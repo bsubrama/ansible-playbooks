@@ -1,0 +1,45 @@
+---
+
+- name: add required packages to make apt repositories work over https
+  apt: name={{ item }} state=present
+  with_items:
+    - "apt-transport-https"
+    - "ca-certificates"
+    - curl
+    - "software-properties-common"
+  sudo: yes
+
+- name: get the current ubuntu release name
+  command: lsb_release -cs
+  register: release_name
+
+- name: Add docker\'s apt key
+  apt_key: url=https://apt.dockerproject.org/gpg state=present
+  sudo: yes
+
+- name: add the docker repo
+  apt_repository:
+    repo: "deb https://apt.dockerproject.org/repo/ ubuntu-{{ release_name.stdout }} main"
+    state: present
+  sudo: yes
+
+- name: install docker
+  apt: name="docker-engine=1.13.1-0~ubuntu-{{ release_name.stdout }}" state=present update_cache=yes
+  sudo: yes
+
+- name: make sure the docker group exists
+  group:
+    name: docker
+    state: present
+  sudo: yes
+
+- name: "add the current user and www-data to the docker group"
+  user:
+    name: "{{ item }}"
+    groups: docker
+    shell: /bin/bash
+    append: yes
+  with_items:
+    - "{{ permissions[inventory_hostname] }}"
+    - "www-data"
+  sudo: yes

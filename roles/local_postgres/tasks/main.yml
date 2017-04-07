@@ -16,7 +16,7 @@
     - setuppostgres
 
 - name: make sure any user can create and connect to a DB
-  lineinfile: dest=/etc/postgresql/9.5/main/pg_hba.conf
+  lineinfile: dest=/etc/postgresql/9.3/main/pg_hba.conf
               state=present
               line="local   all             www-data                                trust"
   sudo: yes

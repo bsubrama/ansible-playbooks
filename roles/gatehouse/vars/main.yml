@@ -61,12 +61,32 @@ proxy_backends:
     port: 80
 
   - name: official_content_curation
-    host: 192.237.249.85
+    host: 162.209.89.171
     port: 80
 
   - name: unicef_kolibri_demo
     host: 192.237.179.50
     port: 8199
+
+  - name: vaultserver
+    host: 104.198.2.23
+    port: 8200
+
+  - name: kolibridemo
+    host: 192.237.248.135
+    port: 8080
+
+  - name: kolibridemo_fr_hack
+    host: 192.237.248.135
+    port: 9090
+
+  - name: kolibridemo_pt_hack
+    host: 192.237.248.135
+    port: 9080
+
+  - name: instantschools_kolibridemo
+    host: 192.237.248.135
+    port: 8090
 
   - name: old_adhocsync_dev_server
     host: 174.129.228.112
@@ -226,8 +246,44 @@ virtual_hosts:
     force_https: yes
 
   - hosts:
+      - fr-instantschools.learningequality.org
+    backend: kolibridemo_fr_hack
+    allow_https: yes
+    force_https: yes
+
+  - hosts:
+      - pt-instantschools.learningequality.org
+    backend: kolibridemo_pt_hack
+    allow_https: yes
+    force_https: yes
+
+  - hosts:
+    - pt.instantschools.learningequality.org
+    locations:
+      - path: ~ ^/(.*)
+        redirect: https://pt-instantschools.learningequality.org/$1
+
+  - hosts:
+    - fr.instantschools.learningequality.org
+    locations:
+      - path: ~ ^/(.*)
+        redirect: https://fr-instantschools.learningequality.org/$1
+
+  - hosts:
       - kolibridemo.learningequality.org
-    backend: unicef_kolibri_demo
+    backend: kolibridemo
+    allow_https: yes
+    force_https: yes
+
+  - hosts:
+      - instantschools.learningequality.org
+    backend: instantschools_kolibridemo
+    allow_https: yes
+    force_https: yes
+
+  - hosts:
+      - secretservice.learningequality.org
+    backend: vaultserver
     allow_https: yes
     force_https: yes
 

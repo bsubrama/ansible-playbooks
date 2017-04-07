@@ -3,7 +3,7 @@
 # ('host' must be specified)
 
 # To create as a root user, do something like:
-# ansible-playbook -i hosts initialize_new_server.yml -e "host=blah ansible_ssh_port=22" --ask-pass
+# ansible-playbook -i hosts initialize_new_server.yml -e "github_username=<YOUR GITHUB USERNAME> host=blah ansible_ssh_port=22" --ask-pass
 
 - hosts: '{{ host }}'
   sudo: yes
@@ -18,17 +18,22 @@
     - common
 
   tasks:
-  - name: Generate random password (won't actually get used for logins).
+  - name: get the username running the deploy
+    local_action: command whoami
+    register: username
+  - name: Generate random password (wont actually get used for logins).
     local_action: shell openssl passwd -in /dev/urandom | head -1
     changed_when: no
     register: password
   - name: Add account for admin and add to the sudoers group
-    user: "name='jamalex' password='{{ password.stdout }}' groups='sudo' shell='/bin/bash' update_password='on_create'"
-  - name: Ensure sudoers don't need to enter password
+    user: "name='{{ username }}' password='{{ password.stdout }}' groups='sudo' shell='/bin/bash' update_password='on_create'"
+  - name: Ensure sudoers dont need to enter password
     lineinfile: "dest=/etc/sudoers state=present regexp='^%sudo[\t ]+ALL' line='%sudo ALL=(ALL:ALL) NOPASSWD: ALL' validate='visudo -cf %s'"
   - name: Add RSA key to the remote host
-    authorized_key: "user='jamalex' key='{{ item }}' state=present"
-    with_items: admins.jamalex["keys"]
+    authorized_key:
+      user: {{ username }}
+      key: "https://github.com/{{ github_username }}.keys"
+      state: present
     notify:
     - restart ssh
   - name: Configure SSHD for the first time (will change SSH listening port from 22 to 4242)

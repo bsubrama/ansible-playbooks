@@ -1,0 +1,6 @@
+---
+- hosts: kolibridemo
+  roles:
+    - common
+    - server
+    - onlinekolibri
