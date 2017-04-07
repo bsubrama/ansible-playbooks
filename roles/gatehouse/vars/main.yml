@@ -245,18 +245,29 @@ virtual_hosts:
     allow_https: yes
     force_https: yes
 
-
   - hosts:
-      - fr.instantschools.learningequality.org
+      - fr-instantschools.learningequality.org
     backend: kolibridemo_fr_hack
     allow_https: yes
     force_https: yes
 
   - hosts:
-      - pt.instantschools.learningequality.org
+      - pt-instantschools.learningequality.org
     backend: kolibridemo_pt_hack
     allow_https: yes
     force_https: yes
+
+  - hosts:
+    - pt.instantschools.learningequality.org
+    locations:
+      - path: ~ ^/(.*)
+        redirect: https://pt-instantschools.learningequality.org/$1
+
+  - hosts:
+    - fr.instantschools.learningequality.org
+    locations:
+      - path: ~ ^/(.*)
+        redirect: https://fr-instantschools.learningequality.org/$1
 
   - hosts:
       - kolibridemo.learningequality.org
