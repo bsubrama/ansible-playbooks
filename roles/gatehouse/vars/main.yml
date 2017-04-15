@@ -88,6 +88,10 @@ proxy_backends:
     host: 192.237.248.135
     port: 9080
 
+  - name: kolibridemo_sw_hack
+    host: 192.237.248.135
+    port: 9070
+
   - name: instantschools_kolibridemo
     host: 192.237.248.135
     port: 8090
@@ -252,6 +256,12 @@ virtual_hosts:
   - hosts:
       - fr-instantschools.learningequality.org
     backend: kolibridemo_fr_hack
+    allow_https: yes
+    force_https: yes
+
+  - hosts:
+      - sw-instantschools.learningequality.org
+    backend: kolibridemo_sw_hack
     allow_https: yes
     force_https: yes
 
