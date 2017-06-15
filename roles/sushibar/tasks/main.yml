@@ -1,0 +1,115 @@
+---
+
+- name: Create the /var/www directory and set it as belonging to the www-data user.
+  file: dest=/var/www owner=www-data state=directory
+  sudo: yes
+  tags:
+    - setupsushibar
+
+- name: clone the content curation repo
+  git: repo=https://github.com/ivanistheone/waiter.git version={{ sushibar_git_branch }} dest=/var/www/{{ sushibar_prefix }} update=yes force=yes
+  sudo: yes
+  sudo_user: www-data
+  notify: restart nginx
+  tags:
+    - updatesushibar
+    - setupsushibar
+
+- name: install deps
+  apt: name={{ item }}
+  sudo: yes
+  with_items:
+    - python3-dev
+    - python3-pip
+    - python-virtualenv
+  tags:
+    - setupdeps
+
+- name: setup nginx
+  template: src=sushibar.nginx.conf.j2 dest=/etc/nginx/sites-enabled/{{ sushibar_prefix }}
+  notify: restart nginx
+  sudo: yes
+  tags:
+    - setupnginx
+    - setupsushibar
+
+- name: remove default nginx config
+  file: dest=/etc/nginx/sites-enabled/default state=absent
+  notify: restart nginx
+  sudo: yes
+  tags:
+    - setupnginx
+    - setupsushibar
+
+- name: allow port 80 on our firewall
+  ufw: policy=allow to_port=80
+  sudo: yes
+  tags:
+    - setupsushibar
+
+- name: ensure that the sushibar postgres database is present
+  postgresql_db: name=waiter owner=www-data state=present login_password=NULL login_user=www-data
+  sudo: yes
+  sudo_user: www-data
+  tags:
+    - setupdeps
+    - setupsushibar
+    - setupdb
+
+- name: initiate virtualenv with dependencies
+  pip: virtualenv={{ sushibar_virtualenv }}
+       virtualenv_python=python3
+       requirements=/var/www/{{ sushibar_prefix }}/requirements/production.txt
+  sudo: yes
+  sudo_user: www-data
+  tags:
+    - setupdeps
+    - setupsushibar
+
+- name: Copy production settings
+  template: src=sushibar.django.production_settings.py.j2 dest=/var/www/{{ sushibar_prefix }}/config/settings/production.py owner=www-data
+  sudo: yes
+  tags:
+    - setupsushibar
+    - setupsettings
+
+- name: run sushibar migrations
+  shell: DJANGO_SETTINGS_MODULE=config.settings.production {{ python_binary }} manage.py migrate
+  args:
+    chdir: /var/www/{{ sushibar_prefix }}/
+  sudo: yes
+  sudo_user: www-data
+  tags:
+    - setupsushibar
+
+name: check if the app server pid file info
+  stat: path={{ sushibar_pid_file }}
+  register: pid_file
+  sudo: yes
+  sudo_user: www-data
+  tags:
+    - runserver
+
+- name: retrieve the app server pid file
+  fetch: src={{ sushibar_pid_file }} dest=/tmp/gunicorn.pid fail_on_missing=yes flat=yes
+  when: pid_file.stat.exists
+  tags:
+    - runserver
+
+- name: reload the app server when it is already running
+  shell: kill -s 1 {{ lookup('file', '/tmp/gunicorn.pid') }}
+  sudo: yes
+  sudo_user: www-data
+  when: pid_file.stat.exists
+  tags:
+    - runserver
+
+- name: run the server if it is not running
+  shell: "{{ gunicorn_binary }} sushibar.wsgi --workers 3 --daemon --reload --bind=unix:/var/www/{{ sushibar_prefix }}/gunicorn.sock --pid {{ sushibar_pid_file }} --env DJANGO_SETTINGS_MODULE=config.settings.production --log-file /tmp/sushibar.log --log-level debug"
+  args:
+    chdir: /var/www/{{ sushibar_prefix }}
+  sudo: yes
+  sudo_user: www-data
+  when: pid_file.stat.exists == False
+  tags:
+    - runserver

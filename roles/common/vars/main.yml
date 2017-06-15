@@ -53,7 +53,9 @@ admins:
   rafaelaguayo:
     keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC8pxa3AuVVSvuOUOIM5niS0pyaL9G9E+SH7/SqDkhgqArFxLVPBlGpGEkvr8fPumIvlUPqqb+GXi4r91gX4h70yrthtucKfdGKwxQmdkJMZGjSt7NCj/quc9GGXtdWZXtAtxPpqHZsaLrAV7tNupsplG9qH6+U1n0IMwVND29Ue6lg1B5dMsvaGV9rMk8YDxyBayDpJmxRsxosSVD8fOKyicy7chzOA5euVvzYsc71yeDJ5ZnnPe3LBL1GQLcqdZbcag+lnwp7D/hHRzE62l3mFB0i8M3NJvEQY5NoKStHZXXn62tlkfbbpjGQNvUBIbT3b4MD09LdF/iwgB9FOYtZtUssVta9X4+JhuifSH2dxXNclo57swORaj8uoAJxz0soRge/Fwevu5tUwCXC4fLtMLjvpsls4fe9ytDDVER7eOFlx02aRyNFS+MmJMg/7vhIu7AjwhsFBLdV5eamTyHedfv6Tig1L0usD0ybImMm/uFf1qwv9HknM2FAvb5mx8sIiDWfUgrddO43amGzCdVyvLbuAmzWS/++tFFHlMIcNr0TxriRv8bWz7OwQHnnV6TXnysTARVfk8ZzDW+/PL9PaHjn+c6q+6NQEVxbFIVtnhY03F/Tpxuplf99pcUyfc2/wUS1QuAiDYIYN/MCfPZnmGTP8DdJTAR/doxFIJj6sw== ralphaguayo22@gmail.com
-
+  bharadwajs:
+    keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDYYLNjzL0AX5U8ZTsJziEfW53Oc2+jGSaMpqJH68pZWJwzSkpR+3TF487LPfStgyOhyKCSKIDySiw8I7eUyuVilYJsx2l+AX5uoMNlNX6XZJvHxaSFoP6iXvht/YaERevYsU9N9NxAQnViXsaJG2Uaq9pu6g6jGOnTcvRr7g7FbBl8APsuJ7E4efWRcxNciW8U217ysTuanIX/DOLzaQTJ6gz/U7gTDB9cDEHwv/iqwEsm7E+POtCGUsDe/CZbum+nQcqzSZfr2o4eGq/FrrvJxYcU8tvc4qgLr9UTnatRDFru4mWiQxe31z40gzCTvPAHbxoVzEvmsA6yLrpShRGP bharadwajs@bharadwajs-macbookpro2.roam.corp.google.com
 former_admins:
   - videoserver
   - ruth
@@ -139,3 +141,7 @@ permissions:
     - jordan
     - rafaelaguayo
     - richard
+  sushibar:
+    - aron
+    - jamalex
+    - bharadwajs

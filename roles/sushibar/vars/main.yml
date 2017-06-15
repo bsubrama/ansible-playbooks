@@ -1,0 +1,30 @@
+---
+
+sushibar_git_branch: master
+sushibar_prefix: sushibar
+
+sushibar_user: leq
+sushibar_port: 80
+sushibar_pid_file: /tmp/sushibar_gunicorn.pid
+
+sushibar_virtualenv: /var/www/sushibar_virtualenv
+python_binary: "{{ content_curation_virtualenv }}/bin/python"
+pip_binary: "{{ content_curation_virtualenv }}/bin/pip"
+gunicorn_binary: "{{ content_curation_virtualenv }}/bin/gunicorn"
+
+system_packages_to_remove: []
+
+system_packages:
+  - python3-dev
+  - python3-pip
+  - python-virtualenv
+  - postgresql
+  - postgresql-contrib
+  - python-dev
+  - postgresql-server-dev-all   # to build psycopg2
+  - nginx
+  - redis
+
+python_packages:
+  - psycopg2
+  - gunicorn

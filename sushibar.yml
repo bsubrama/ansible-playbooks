@@ -1,0 +1,15 @@
+---
+- hosts: sushibar
+  vars_files:
+    - [roles/content-curation/vars/email_secrets.yml, roles/content-curation/vars/main.yml]
+  vars:
+    - system_packages:
+      - postgresql
+      - postgresql-contrib
+      - postgresql-server-dev-all   # to build psycopg2
+    - python_packages:
+        - psycopg2
+  roles:
+    - common
+    - server
+    - sushibar
